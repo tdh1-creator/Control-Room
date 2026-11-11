@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only these two accounts can read or write anything.
+    // Replace the placeholders with the User UIDs from Firebase → Authentication → Users.
+    function isFamily() {
+      return request.auth != null && request.auth.uid in [
+        'PASTE_FIRST_UID_HERE',
+        'PASTE_SECOND_UID_HERE'
+      ];
+    }
+
+    match /{document=**} {
+      allow read, write: if isFamily();
+    }
+  }
+}
